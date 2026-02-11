@@ -1,4 +1,4 @@
-namespace XmlSpecifiedGenerator.Tests.GeneratorTests;
+namespace XmlSpecified.Tests.GeneratorTests;
 
 public class BoolOptionsTests
 {

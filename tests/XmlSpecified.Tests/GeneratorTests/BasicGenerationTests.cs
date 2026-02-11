@@ -1,4 +1,4 @@
-namespace XmlSpecifiedGenerator.Tests.GeneratorTests;
+namespace XmlSpecified.Tests.GeneratorTests;
 
 public class BasicGenerationTests
 {
@@ -223,8 +223,8 @@ public class BasicGenerationTests
             """;
 
         // Act
-        var generatedSource1 = GeneratorTestHelper.GetGeneratedSource(source);
-        var generatedSource2 = GeneratorTestHelper.GetGeneratedSource(source);
+        var generatedSource1 = GeneratorTestHelper.Verify(source);
+        var generatedSource2 = GeneratorTestHelper.Verify(source);
 
         // Assert
         Assert.Equal(generatedSource1, generatedSource2);
@@ -256,10 +256,7 @@ public class BasicGenerationTests
             }
             """;
 
-        // Act
-        var generatedSource = GeneratorTestHelper.GetGeneratedSource(source);
-
-        // Assert
-        return Verify(generatedSource);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 }

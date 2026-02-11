@@ -1,4 +1,4 @@
-namespace XmlSpecifiedGenerator.Tests.GeneratorTests;
+namespace XmlSpecified.Tests.GeneratorTests;
 
 public class DiagnosticTests
 {
@@ -18,11 +18,8 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 
     [Fact]
@@ -44,11 +41,8 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 
     [Fact]
@@ -67,11 +61,8 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 
     [Fact]
@@ -110,11 +101,8 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 
     [Fact]
@@ -133,11 +121,8 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 
     [Fact]
@@ -156,11 +141,8 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 
     [Fact]
@@ -179,11 +161,8 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 
     [Fact]
@@ -203,11 +182,8 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 
     [Fact]
@@ -226,11 +202,8 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 
     [Fact]
@@ -254,10 +227,7 @@ public class DiagnosticTests
             }
             """;
 
-        // Act
-        var diagnostics = GeneratorTestHelper.GetDiagnostics(source);
-
-        // Assert
-        return Verify(diagnostics);
+        // Act - Assert
+        return GeneratorTestHelper.Verify(source);
     }
 }

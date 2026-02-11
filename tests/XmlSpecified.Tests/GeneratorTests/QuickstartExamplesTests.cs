@@ -1,4 +1,4 @@
-namespace XmlSpecifiedGenerator.Tests.GeneratorTests;
+namespace XmlSpecified.Tests.GeneratorTests;
 
 /// <summary>
 /// Tests that validate the examples in quickstart.md compile and generate correctly.

@@ -41,7 +41,4 @@
   <ItemGroup>
     <None Include="..\..\README.md" Pack="true" PackagePath="\" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Generator\Factories\" />
-  </ItemGroup>
 </Project>
