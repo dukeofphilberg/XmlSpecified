@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>12</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <!-- Analyzer/Generator packaging -->
+    <IsRoslynComponent>true</IsRoslynComponent>
+    <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+    <DevelopmentDependency>true</DevelopmentDependency>
+    <SuppressDependenciesWhenPacking>true</SuppressDependenciesWhenPacking>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <!-- Package metadata -->
+    <PackageId>XmlSpecified</PackageId>
+    <Version>0.1.0</Version>
+    <Description>A C# source generator that automatically creates [PropertyName]Specified properties for XmlSerialization, eliminating boilerplate code for conditional XML element inclusion.</Description>
+    <PackageTags>source-generator;xml;serialization;xmlserializer;specified;roslyn;codegen</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/dukeofphilberg/XmlSpecifiedGenerator</PackageProjectUrl>
+    <!-- Suppress warnings for netstandard2.0 and analyzer release tracking -->
+    <NoWarn>$(NoWarn);NU5128;RS2008</NoWarn>
+    <!-- Include build output in analyzers folder -->
+    <IncludeBuildOutput>true</IncludeBuildOutput>
+    <BuildOutputTargetFolder>analyzers/dotnet/cs</BuildOutputTargetFolder>
+    <Company>XmlSpecified</Company>
+    <Copyright>Copyright © 2026 XmlSpecified</Copyright>
+  </PropertyGroup>
+  <ItemGroup>
+    <InternalsVisibleTo Include="XmlSpecified.Tests" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="IsExternalInit">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" />
+  </ItemGroup>
+  <!-- Include README in package -->
+  <ItemGroup>
+    <None Include="..\..\README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Generator\Factories\" />
+  </ItemGroup>
+</Project>

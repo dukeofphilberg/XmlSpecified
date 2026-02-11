@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/XmlSpecified/XmlSpecified.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/XmlSpecified.IntegrationTests/XmlSpecified.IntegrationTests.csproj" />
+    <Project Path="tests/XmlSpecified.Tests/XmlSpecified.Tests.csproj" />
+  </Folder>
+  <Folder Name="/samples/">
+    <Project Path="samples/SampleConsumer/SampleConsumer.csproj" />
+  </Folder>
+</Solution>
