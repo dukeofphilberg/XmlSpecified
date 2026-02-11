@@ -33,7 +33,7 @@ public class BasicGenerationTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive)]
+                [XmlSpecified(NumericOptions.Positive)]
                 public int Quantity { get; set; }
             }
             """;
@@ -53,7 +53,7 @@ public class BasicGenerationTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive | NumericOptions.Zero)]
+                [XmlSpecified(NumericOptions.Positive | NumericOptions.Zero)]
                 public decimal Price { get; set; }
             }
             """;
@@ -73,7 +73,7 @@ public class BasicGenerationTests
 
             public partial class TestClass
             {
-                [XmlSpecified(StringOptions = StringOptions.NonWhitespace)]
+                [XmlSpecified(StringOptions.NonWhitespace)]
                 public string Name { get; set; }
             }
             """;
@@ -93,7 +93,7 @@ public class BasicGenerationTests
 
             public partial class TestClass
             {
-                [XmlSpecified(BoolOptions = BoolOptions.True)]
+                [XmlSpecified(BoolOptions.True)]
                 public bool IsActive { get; set; }
             }
             """;
@@ -114,7 +114,7 @@ public class BasicGenerationTests
 
             public partial class TestClass
             {
-                [XmlSpecified(CollectionOptions = CollectionOptions.NonEmpty)]
+                [XmlSpecified(CollectionOptions.NonEmpty)]
                 public List<string> Tags { get; set; }
             }
             """;

@@ -13,7 +13,7 @@ public class BoolOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(BoolOptions = BoolOptions.True)]
+                [XmlSpecified(BoolOptions.True)]
                 public bool IsActive { get; set; }
             }
             """;
@@ -33,7 +33,7 @@ public class BoolOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(BoolOptions = BoolOptions.False)]
+                [XmlSpecified(BoolOptions.False)]
                 public bool IsDeleted { get; set; }
             }
             """;

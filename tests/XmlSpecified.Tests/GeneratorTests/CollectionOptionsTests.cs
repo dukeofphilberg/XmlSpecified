@@ -14,7 +14,7 @@ public class CollectionOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(CollectionOptions = CollectionOptions.NonEmpty)]
+                [XmlSpecified(CollectionOptions.NonEmpty)]
                 public List<string> Items { get; set; }
             }
             """;
@@ -34,7 +34,7 @@ public class CollectionOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(CollectionOptions = CollectionOptions.NonEmpty)]
+                [XmlSpecified(CollectionOptions.NonEmpty)]
                 public int[] Numbers { get; set; }
             }
             """;
@@ -55,7 +55,7 @@ public class CollectionOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(CollectionOptions = CollectionOptions.NonNull)]
+                [XmlSpecified(CollectionOptions.NonNull)]
                 public List<int> Values { get; set; }
             }
             """;
@@ -75,7 +75,7 @@ public class CollectionOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(CollectionOptions = CollectionOptions.NonNull)]
+                [XmlSpecified(CollectionOptions.NonNull)]
                 public string[] Tags { get; set; }
             }
             """;
@@ -96,7 +96,7 @@ public class CollectionOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(CollectionOptions = CollectionOptions.NonEmpty)]
+                [XmlSpecified(CollectionOptions.NonEmpty)]
                 public IList<string> Items { get; set; }
             }
             """;
@@ -117,7 +117,7 @@ public class CollectionOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(CollectionOptions = CollectionOptions.NonEmpty)]
+                [XmlSpecified(CollectionOptions.NonEmpty)]
                 public IEnumerable<string> Items { get; set; }
             }
             """;

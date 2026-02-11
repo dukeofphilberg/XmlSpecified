@@ -20,7 +20,7 @@ namespace XmlSpecified;
 /// <code>
 /// public partial class Order
 /// {
-///     [XmlSpecified(NumericOptions = NumericOptions.Positive)]
+///     [XmlSpecified(NumericOptions.Positive)]
 ///     public int Quantity { get; set; }
 /// }
 ///
@@ -69,7 +69,7 @@ public sealed class XmlSpecifiedAttribute : Attribute
     /// <param name="numericOptions"></param>
     public XmlSpecifiedAttribute(NumericOptions numericOptions)
     {
-        NumericOptions = numericOptions;
+        numericOptions;
     }
 
     /// <summary>

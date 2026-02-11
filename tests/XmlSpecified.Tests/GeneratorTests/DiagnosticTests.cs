@@ -96,7 +96,7 @@ public class DiagnosticTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive, StringOptions = StringOptions.NonEmpty)]
+                [XmlSpecified(NumericOptions.Positive, StringOptions = StringOptions.NonEmpty)]
                 public string Name { get; set; }  // Both options specified
             }
             """;

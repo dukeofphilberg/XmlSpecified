@@ -15,10 +15,10 @@ using XmlSpecified;
 
 public partial class Order  // Must be partial!
 {
-    [XmlSpecified(NumericOptions = NumericOptions.Positive)]
+    [XmlSpecified(NumericOptions.Positive)]
     public int Quantity { get; set; }
 
-    [XmlSpecified(StringOptions = StringOptions.NonWhitespace)]
+    [XmlSpecified(StringOptions.NonWhitespace)]
     public string CustomerName { get; set; }
 
     [XmlSpecified]  // Nullable types default to HasValue
@@ -55,31 +55,31 @@ public partial class Order
 ### NumericOptions (Flags)
 
 ```csharp
-[XmlSpecified(NumericOptions = NumericOptions.Positive)]  // value > 0
-[XmlSpecified(NumericOptions = NumericOptions.Positive | NumericOptions.Zero)]  // value >= 0
-[XmlSpecified(NumericOptions = NumericOptions.Negative)]  // value < 0
+[XmlSpecified(NumericOptions.Positive)]  // value > 0
+[XmlSpecified(NumericOptions.Positive | NumericOptions.Zero)]  // value >= 0
+[XmlSpecified(NumericOptions.Negative)]  // value < 0
 ```
 
 ### StringOptions
 
 ```csharp
-[XmlSpecified(StringOptions = StringOptions.NonWhitespace)]  // !IsNullOrWhiteSpace
-[XmlSpecified(StringOptions = StringOptions.NonEmpty)]  // !IsNullOrEmpty
-[XmlSpecified(StringOptions = StringOptions.NonNull)]  // != null
+[XmlSpecified(StringOptions.NonWhitespace)]  // !IsNullOrWhiteSpace
+[XmlSpecified(StringOptions.NonEmpty)]  // !IsNullOrEmpty
+[XmlSpecified(StringOptions.NonNull)]  // != null
 ```
 
 ### BoolOptions
 
 ```csharp
-[XmlSpecified(BoolOptions = BoolOptions.True)]   // value == true
-[XmlSpecified(BoolOptions = BoolOptions.False)]  // value == false
+[XmlSpecified(BoolOptions.True)]   // value == true
+[XmlSpecified(BoolOptions.False)]  // value == false
 ```
 
 ### CollectionOptions
 
 ```csharp
-[XmlSpecified(CollectionOptions = CollectionOptions.NonEmpty)]  // != null && Count > 0
-[XmlSpecified(CollectionOptions = CollectionOptions.NonNull)]   // != null
+[XmlSpecified(CollectionOptions.NonEmpty)]  // != null && Count > 0
+[XmlSpecified(CollectionOptions.NonNull)]   // != null
 ```
 
 ## Diagnostics
@@ -90,8 +90,7 @@ public partial class Order
 | XSG002 | Warning | Specified property already exists |
 | XSG003 | Warning | Property has no setter |
 | XSG004 | Error | Property is static |
-| XSG005 | Warning | Multiple option types specified |
-| XSG006 | Error | Missing required option |
+| XSG005 | Error | Missing required option |
 
 ## License
 

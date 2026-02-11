@@ -13,7 +13,7 @@ public class NumericOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive)]
+                [XmlSpecified(NumericOptions.Positive)]
                 public int Quantity { get; set; }
             }
             """;
@@ -33,7 +33,7 @@ public class NumericOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Zero)]
+                [XmlSpecified(NumericOptions.Zero)]
                 public int Value { get; set; }
             }
             """;
@@ -53,7 +53,7 @@ public class NumericOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Negative)]
+                [XmlSpecified(NumericOptions.Negative)]
                 public int Value { get; set; }
             }
             """;
@@ -73,7 +73,7 @@ public class NumericOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive | NumericOptions.Zero)]
+                [XmlSpecified(NumericOptions.Positive | NumericOptions.Zero)]
                 public decimal Price { get; set; }
             }
             """;
@@ -93,7 +93,7 @@ public class NumericOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Negative | NumericOptions.Zero)]
+                [XmlSpecified(NumericOptions.Negative | NumericOptions.Zero)]
                 public int Value { get; set; }
             }
             """;
@@ -113,7 +113,7 @@ public class NumericOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive | NumericOptions.Negative)]
+                [XmlSpecified(NumericOptions.Positive | NumericOptions.Negative)]
                 public int Value { get; set; }
             }
             """;
@@ -133,7 +133,7 @@ public class NumericOptionsTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive | NumericOptions.Zero | NumericOptions.Negative)]
+                [XmlSpecified(NumericOptions.Positive | NumericOptions.Zero | NumericOptions.Negative)]
                 public int Value { get; set; }
             }
             """;

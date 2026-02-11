@@ -14,10 +14,10 @@ public class QuickstartExamplesTests
 
             public partial class Order
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive)]
+                [XmlSpecified(NumericOptions.Positive)]
                 public int Quantity { get; set; }
 
-                [XmlSpecified(StringOptions = StringOptions.NonWhitespace)]
+                [XmlSpecified(StringOptions.NonWhitespace)]
                 public string CustomerName { get; set; }
 
                 [XmlSpecified]
@@ -38,7 +38,7 @@ public class QuickstartExamplesTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive | NumericOptions.Zero)]
+                [XmlSpecified(NumericOptions.Positive | NumericOptions.Zero)]
                 public int Quantity { get; set; }
             }
             """;
@@ -56,7 +56,7 @@ public class QuickstartExamplesTests
 
             public partial class TestClass
             {
-                [XmlSpecified(BoolOptions = BoolOptions.True)]
+                [XmlSpecified(BoolOptions.True)]
                 public bool IsActive { get; set; }
             }
             """;
@@ -75,7 +75,7 @@ public class QuickstartExamplesTests
 
             public partial class TestClass
             {
-                [XmlSpecified(CollectionOptions = CollectionOptions.NonEmpty)]
+                [XmlSpecified(CollectionOptions.NonEmpty)]
                 public List<string> Tags { get; set; }
             }
             """;
@@ -93,7 +93,7 @@ public class QuickstartExamplesTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive)]
+                [XmlSpecified(NumericOptions.Positive)]
                 public int? Count { get; set; }
             }
             """;

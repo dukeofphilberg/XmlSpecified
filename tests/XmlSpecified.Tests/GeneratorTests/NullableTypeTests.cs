@@ -94,7 +94,7 @@ public class NullableTypeTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive)]
+                [XmlSpecified(NumericOptions.Positive)]
                 public int? Value { get; set; }
             }
             """;
@@ -114,7 +114,7 @@ public class NullableTypeTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions = NumericOptions.Positive | NumericOptions.Zero)]
+                [XmlSpecified(NumericOptions.Positive | NumericOptions.Zero)]
                 public decimal? Price { get; set; }
             }
             """;
