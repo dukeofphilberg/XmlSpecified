@@ -26,7 +26,7 @@ public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
         var allProperties = context.SyntaxProvider.ForAttributeWithMetadataName(
             AttributeFullName,
             predicate: (node, _) => node is BasePropertyDeclarationSyntax,
-            transform: (ctx, _) => PropertyTarget.Create(ctx)
+            transform: (ctx, _) => ModelsFactory.CreatePropertyTarget(ctx)
         );
 
         // Group properties by containing PropertyContainer
@@ -40,8 +40,9 @@ public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
                         .Select(g => new PropertyGrouping
                         {
                             Container = g.Key,
-                            Properties = new EquatableArray<(PropertyData, DiagnosticData)>(
-                                g.Select(p => (p.PropertyData, p.DiagnosticData)).ToArray()
+                            Properties = new EquatableArray<PropertyResult>(
+                                g.Select(p => new PropertyResult(p.PropertyData, p.DiagnosticData))
+                                    .ToArray()
                             ),
                         })
             );
@@ -100,7 +101,7 @@ public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
             if (hasCode)
             {
                 var sourceCode = builder.Build();
-                var fileName = builder.GetFileName();
+                var fileName = Utilities.Utilities.GetFileName(propertyContainer);
                 context.AddSource(fileName, sourceCode);
             }
         }

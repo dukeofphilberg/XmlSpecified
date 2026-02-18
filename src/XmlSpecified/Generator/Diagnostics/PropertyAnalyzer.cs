@@ -10,54 +10,17 @@ namespace XmlSpecified.Generator.Diagnostics;
 internal static class PropertyAnalyzer
 {
     /// <summary>
-    /// Result of analyzing a property.
-    /// </summary>
-    public sealed class AnalysisResult
-    {
-        public bool ShouldGenerate { get; }
-        public Diagnostic[] Diagnostics { get; }
-
-        public AnalysisResult(bool shouldGenerate, Diagnostic[] diagnostics)
-        {
-            ShouldGenerate = shouldGenerate;
-            Diagnostics = diagnostics;
-        }
-    }
-
-    /// <summary>
-    /// Gets a list of specified option type names.
-    /// </summary>
-    public static string GetSpecifiedOptionNames(AttributeValues values)
-    {
-        var names = new List<string>();
-        if (values.NumericOptions is not null)
-            names.Add("NumericOptions");
-        if (values.StringOptions is not null)
-            names.Add("StringOptions");
-        if (values.BoolOptions is not null)
-            names.Add("BoolOptions");
-        if (values.CollectionOptions is not null)
-            names.Add("CollectionOptions");
-        return string.Join(", ", names);
-    }
-
-    /// <summary>
     /// Analyzes a property and generates the check expression.
     /// </summary>
-    public static AnalysisResult Analyze(
+    internal static PropertyAnalysisResult Analyze(
         PropertyContainer propertyContainer,
         PropertyData propertyData,
         DiagnosticData diagnosticData
     )
     {
-        var className = string.Empty;
-        foreach (var parentClass in propertyContainer.PropertyClasses)
-        {
-            className = parentClass.Name;
-        }
-
+        var last = propertyContainer.PropertyClasses.Count - 1;
+        var className = propertyContainer.PropertyClasses.AsSpan()[last].Name;
         var diagnostics = new List<Diagnostic>();
-        var shouldGenerate = true;
         var location = diagnosticData.Location.GetLocation();
 
         // XSG001: Non-partial class
@@ -70,7 +33,6 @@ internal static class PropertyAnalyzer
                     className
                 )
             );
-            shouldGenerate = false;
         }
 
         // XSG002: Duplicate Specified property
@@ -83,7 +45,6 @@ internal static class PropertyAnalyzer
                     className
                 )
             );
-            shouldGenerate = false;
         }
 
         // XSG003: Read-only property
@@ -101,20 +62,11 @@ internal static class PropertyAnalyzer
             diagnostics.Add(
                 DiagnosticReporter.ReportStaticProperty(location, propertyData.PropertyName)
             );
-            shouldGenerate = false;
         }
 
         // XSG005: Missing required option
-        var hasRequiredOption = diagnosticData.RequiredOptionName switch
-        {
-            "NumericOptions" => propertyData.AttributeValues.NumericOptions is not null,
-            "StringOptions" => propertyData.AttributeValues.StringOptions is not null,
-            "BoolOptions" => propertyData.AttributeValues.BoolOptions is not null,
-            "CollectionOptions" => propertyData.AttributeValues.CollectionOptions is not null,
-            _ => true,
-        };
 
-        if (!hasRequiredOption)
+        if (!diagnosticData.HasRequiredOption)
         {
             diagnostics.Add(
                 DiagnosticReporter.ReportMissingRequiredOption(
@@ -124,11 +76,8 @@ internal static class PropertyAnalyzer
                     diagnosticData.RequiredOptionName ?? string.Empty
                 )
             );
-            shouldGenerate = false;
         }
 
-        var result = new AnalysisResult(shouldGenerate, diagnostics.ToArray());
-
-        return result;
+        return new PropertyAnalysisResult { Diagnostics = [.. diagnostics] };
     }
 }

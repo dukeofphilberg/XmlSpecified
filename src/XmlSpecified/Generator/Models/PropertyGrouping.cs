@@ -6,8 +6,7 @@ namespace XmlSpecified.Generator.Models;
 /// Grouped pipeline output — a named equatable type to replace anonymous ValueTuple
 /// in the incremental generator pipeline, which requires proper equality support.
 /// </summary>
-internal readonly record struct PropertyGrouping
-{
-    public PropertyContainer Container { get; init; }
-    public EquatableArray<(PropertyData, DiagnosticData)> Properties { get; init; }
-}
+internal readonly record struct PropertyGrouping(
+    PropertyContainer Container,
+    EquatableArray<PropertyResult> Properties
+);

@@ -10,69 +10,54 @@ internal static class DiagnosticReporter
     /// <summary>
     /// Creates a diagnostic for a non-partial class.
     /// </summary>
-    public static Diagnostic ReportNonPartialClass(
+    internal static Diagnostic ReportNonPartialClass(
         Location location,
         string propertyName,
         string className
-    )
-    {
-        return Diagnostic.Create(
-            DiagnosticDescriptors.NonPartialClass,
-            location,
-            propertyName,
-            className
-        );
-    }
+    ) =>
+        Diagnostic.Create(DiagnosticDescriptors.NonPartialClass, location, propertyName, className);
 
     /// <summary>
     /// Creates a diagnostic for a duplicate Specified property.
     /// </summary>
-    public static Diagnostic ReportDuplicateSpecifiedProperty(
+    internal static Diagnostic ReportDuplicateSpecifiedProperty(
         Location location,
         string propertyName,
         string className
-    )
-    {
-        return Diagnostic.Create(
+    ) =>
+        Diagnostic.Create(
             DiagnosticDescriptors.DuplicateSpecifiedProperty,
             location,
             propertyName,
             className
         );
-    }
 
     /// <summary>
     /// Creates a diagnostic for a read-only property.
     /// </summary>
-    public static Diagnostic ReportReadOnlyProperty(Location location, string propertyName)
-    {
-        return Diagnostic.Create(DiagnosticDescriptors.ReadOnlyProperty, location, propertyName);
-    }
+    internal static Diagnostic ReportReadOnlyProperty(Location location, string propertyName) =>
+        Diagnostic.Create(DiagnosticDescriptors.ReadOnlyProperty, location, propertyName);
 
     /// <summary>
     /// Creates a diagnostic for a static property.
     /// </summary>
-    public static Diagnostic ReportStaticProperty(Location location, string propertyName)
-    {
-        return Diagnostic.Create(DiagnosticDescriptors.StaticProperty, location, propertyName);
-    }
+    internal static Diagnostic ReportStaticProperty(Location location, string propertyName) =>
+        Diagnostic.Create(DiagnosticDescriptors.StaticProperty, location, propertyName);
 
     /// <summary>
     /// Creates a diagnostic for a missing required option.
     /// </summary>
-    public static Diagnostic ReportMissingRequiredOption(
+    internal static Diagnostic ReportMissingRequiredOption(
         Location location,
         string propertyName,
         string typeName,
         string requiredOption
-    )
-    {
-        return Diagnostic.Create(
+    ) =>
+        Diagnostic.Create(
             DiagnosticDescriptors.MissingRequiredOption,
             location,
             propertyName,
             typeName,
             requiredOption
         );
-    }
 }

@@ -2,7 +2,7 @@ using System.Text;
 
 namespace XmlSpecified.Generator.Utilities;
 
-internal class IndentedStringBuilder
+internal sealed class IndentedStringBuilder
 {
     private readonly StringBuilder _builder;
     private int _indentLevel;

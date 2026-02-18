@@ -69,7 +69,7 @@ public sealed class XmlSpecifiedAttribute : Attribute
     /// <param name="numericOptions"></param>
     public XmlSpecifiedAttribute(NumericOptions numericOptions)
     {
-        numericOptions;
+        NumericOptions = numericOptions;
     }
 
     /// <summary>

@@ -2,7 +2,7 @@ using XmlSpecified.Generator.Models;
 
 namespace XmlSpecified.Generator.Utilities;
 
-internal class ExpressionGenerator
+internal static class ExpressionGenerator
 {
     /// <summary>
     /// Generates the check expression based on property type and options.

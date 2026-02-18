@@ -2,9 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using XmlSpecified.Generator.Models;
-using XmlSpecified.Generator.Utilities;
 
-namespace XmlSpecified.Generator;
+namespace XmlSpecified.Generator.Utilities;
 
 /// <summary>
 /// Builds the generated source code for Specified properties.
@@ -130,14 +129,5 @@ internal sealed class SpecifiedCodeBuilder
         }
 
         return sb.ToString();
-    }
-
-    /// <summary>
-    /// Gets the generated file name for the class.
-    /// </summary>
-    public string GetFileName()
-    {
-        var str = _propertyContainer.PropertyClasses.Select(p => p.Name);
-        return $"{string.Join(".", str)}.XmlSpecified.g.cs";
     }
 }

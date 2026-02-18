@@ -4,12 +4,12 @@ using Microsoft.CodeAnalysis.Text;
 
 namespace XmlSpecified.Generator.Models;
 
-internal readonly record struct PropertyLocation : IEquatable<PropertyLocation>
+internal readonly record struct PropertyLocation(
+    string FilePath,
+    TextSpan TextSpan,
+    LinePositionSpan LineSpan
+) : IEquatable<PropertyLocation>
 {
-    public string FilePath { get; init; }
-    public TextSpan TextSpan { get; init; }
-    public LinePositionSpan LineSpan { get; init; }
-
     public Location GetLocation()
     {
         return Location.Create(FilePath, TextSpan, LineSpan);
@@ -32,18 +32,5 @@ internal readonly record struct PropertyLocation : IEquatable<PropertyLocation>
             hash = hash * 31 + LineSpan.GetHashCode();
             return hash;
         }
-    }
-
-    internal static PropertyLocation Create(IPropertySymbol symbol)
-    {
-        var location = symbol.Locations[0];
-        var lineSpan = location.GetLineSpan();
-
-        return new PropertyLocation
-        {
-            FilePath = lineSpan.Path,
-            TextSpan = location.SourceSpan,
-            LineSpan = lineSpan.Span,
-        };
     }
 }
