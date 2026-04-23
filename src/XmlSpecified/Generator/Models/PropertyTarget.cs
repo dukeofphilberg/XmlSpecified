@@ -13,12 +13,13 @@ internal readonly record struct PropertyTarget(
         var symbol = (IPropertySymbol)context.TargetSymbol;
         var attributes = symbol.GetAttributes();
         var attributeValues = SpecifiedOptions.Create(attributes[0]);
+        var typeInfo = TypeInfo.Create(symbol.Type);
 
         return new PropertyTarget
         {
             PropertyContainer = PropertyContainer.Create(symbol),
-            PropertyData = PropertyData.Create(symbol, attributeValues),
-            DiagnosticData = DiagnosticData.Create(symbol, attributeValues),
+            PropertyData = PropertyData.Create(symbol, typeInfo, attributeValues),
+            DiagnosticData = DiagnosticData.Create(symbol, typeInfo, attributeValues),
         };
     }
 }

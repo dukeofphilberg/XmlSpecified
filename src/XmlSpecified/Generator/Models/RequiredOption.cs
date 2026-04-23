@@ -12,54 +12,32 @@ internal readonly record struct RequiredOption(bool IsRequired, string OptionNam
     /// Determines the required option type for a property type.
     /// Returns null if no explicit option is required (nullable value types, reference types).
     /// </summary>
-    internal static RequiredOption Create(IPropertySymbol symbol, SpecifiedOptions attributeValues)
+    internal static RequiredOption Create(TypeInfo typeInfo, SpecifiedOptions attributeValues)
     {
-        var propertyType = symbol.Type;
-        string requiredOptionName = string.Empty;
-
-        // Nullable value types don't require explicit options
-        if (TypeCheckResolver.IsNullableValueType(propertyType))
-        {
-            requiredOptionName = string.Empty;
-        }
         // Non-nullable value types require explicit options
-        else if (TypeCheckResolver.IsBoolType(propertyType))
+        if (typeInfo.IsBool)
         {
-            requiredOptionName = "BoolOptions";
+            return new RequiredOption(attributeValues.BoolOptions is not null, "BoolOptions");
         }
-        else if (TypeCheckResolver.IsNumericType(propertyType))
+        else if (typeInfo.IsNumeric)
         {
-            requiredOptionName = "NumericOptions";
+            return new RequiredOption(attributeValues.NumericOptions is not null, "NumericOptions");
         }
         // String requires StringOptions
-        else if (TypeCheckResolver.IsStringType(propertyType))
+        else if (typeInfo.IsString)
         {
-            requiredOptionName = "StringOptions";
+            return new RequiredOption(attributeValues.StringOptions is not null, "StringOptions");
         }
         // Collections require CollectionOptions
-        else if (
-            propertyType.TypeKind == TypeKind.Array
-            || TypeCheckResolver.IsCollectionType(propertyType)
-            || TypeCheckResolver.IsEnumerable(propertyType)
-        )
+        else if (typeInfo.IsArray || typeInfo.IsCollection || typeInfo.IsEnumerable)
         {
-            requiredOptionName = "CollectionOptions";
-        }
-        else
-        {
-            // For other reference types, no explicit options are required
-            requiredOptionName = string.Empty;
+            return new RequiredOption(
+                attributeValues.CollectionOptions is not null,
+                "CollectionOptions"
+            );
         }
 
-        var hasRequiredOption = requiredOptionName switch
-        {
-            "NumericOptions" => attributeValues.NumericOptions is not null,
-            "StringOptions" => attributeValues.StringOptions is not null,
-            "BoolOptions" => attributeValues.BoolOptions is not null,
-            "CollectionOptions" => attributeValues.CollectionOptions is not null,
-            _ => true,
-        };
-
-        return new RequiredOption(hasRequiredOption, requiredOptionName);
+        // For other reference types or nullable types, no explicit options are required
+        return new RequiredOption(true, string.Empty);
     }
 }

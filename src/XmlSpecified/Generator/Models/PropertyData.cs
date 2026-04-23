@@ -12,13 +12,17 @@ internal readonly record struct PropertyData(
     SpecifiedOptions AttributeValues
 )
 {
-    internal static PropertyData Create(IPropertySymbol symbol, SpecifiedOptions attributeValues)
+    internal static PropertyData Create(
+        IPropertySymbol symbol,
+        TypeInfo typeInfo,
+        SpecifiedOptions attributeValues
+    )
     {
         return new PropertyData
         {
             AttributeValues = attributeValues,
             PropertyName = symbol.Name,
-            PropertyType = TypeInfo.Create(symbol.Type),
+            PropertyType = typeInfo,
             PropertyTypeDisplayString = symbol.Type.ToDisplayString(),
         };
     }
