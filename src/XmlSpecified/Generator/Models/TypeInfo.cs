@@ -4,6 +4,7 @@ using XmlSpecified.Generator.Utilities;
 namespace XmlSpecified.Generator.Models;
 
 internal readonly record struct TypeInfo(
+    string Name,
     bool IsNullable,
     bool IsNumeric,
     bool IsReference,
@@ -18,14 +19,15 @@ internal readonly record struct TypeInfo(
     {
         return new TypeInfo
         {
-            IsNullable = TypeCheckResolver.IsNullableValueType(propertyType),
-            IsNumeric = TypeCheckResolver.IsNumericType(propertyType),
-            IsReference = TypeCheckResolver.IsReferenceType(propertyType),
-            IsString = TypeCheckResolver.IsStringType(propertyType),
-            IsBool = TypeCheckResolver.IsBoolType(propertyType),
+            Name = propertyType.ToDisplayString(),
+            IsNullable = TypeUtilities.IsNullableValueType(propertyType),
+            IsNumeric = TypeUtilities.IsNumericType(propertyType),
+            IsReference = TypeUtilities.IsReferenceType(propertyType),
+            IsString = TypeUtilities.IsStringType(propertyType),
+            IsBool = TypeUtilities.IsBoolType(propertyType),
             IsArray = propertyType is IArrayTypeSymbol,
-            IsCollection = TypeCheckResolver.IsCollectionType(propertyType),
-            IsEnumerable = TypeCheckResolver.IsEnumerable(propertyType),
+            IsCollection = TypeUtilities.IsCollectionType(propertyType),
+            IsEnumerable = TypeUtilities.IsEnumerable(propertyType),
         };
     }
 }

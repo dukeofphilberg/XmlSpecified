@@ -9,6 +9,16 @@ internal static class DiagnosticDescriptors
 {
     private const string Category = "Usage";
 
+    internal static readonly DiagnosticDescriptor GeneratorError = new(
+        id: "XSG000",
+        title: "Generator error",
+        messageFormat: "XmlSpecifiedGenerator failed: {0}",
+        category: "XmlSpecified",
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        description: "An unexpected error occurred during source generation."
+    );
+
     /// <summary>
     /// XSG001: Property is decorated with [XmlSpecified] but class is not partial.
     /// </summary>
@@ -73,4 +83,10 @@ internal static class DiagnosticDescriptors
         isEnabledByDefault: true,
         description: "Non-nullable value types (bool, int, string, collections) require an explicit option to determine when they are considered 'specified'."
     );
+
+
+                    Location.None,
+                    ex.ToString()
+                )
+            );
 }

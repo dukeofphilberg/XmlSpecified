@@ -8,7 +8,6 @@ namespace XmlSpecified.Generator.Models;
 internal readonly record struct PropertyData(
     string PropertyName,
     TypeInfo PropertyType,
-    string PropertyTypeDisplayString,
     AttributeOptions AttributeOptions
 )
 {
@@ -23,7 +22,6 @@ internal readonly record struct PropertyData(
             AttributeOptions = attributeOptions,
             PropertyName = symbol.Name,
             PropertyType = typeInfo,
-            PropertyTypeDisplayString = symbol.Type.ToDisplayString(),
         };
     }
 }

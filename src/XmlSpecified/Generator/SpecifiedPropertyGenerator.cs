@@ -105,20 +105,8 @@ public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
         }
         catch (Exception ex)
         {
-            context.ReportDiagnostic(
-                Diagnostic.Create(
-                    new DiagnosticDescriptor(
-                        "XMLSG0000",
-                        "Generator Error",
-                        "XmlSpecifiedGenerator failed: {0}",
-                        "XmlSpecified",
-                        DiagnosticSeverity.Error,
-                        isEnabledByDefault: true
-                    ),
-                    Location.None,
-                    ex.ToString()
-                )
-            );
+            var diagnostic = DiagnosticReporter.ReportGeneratorError(ex);
+            context.ReportDiagnostic(diagnostic);
         }
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Microsoft.CodeAnalysis;
 
 namespace XmlSpecified.Generator.Utilities;
@@ -5,7 +6,7 @@ namespace XmlSpecified.Generator.Utilities;
 /// <summary>
 /// Resolves the appropriate type check expression for a property based on its type and options.
 /// </summary>
-internal static class TypeCheckResolver
+internal static class TypeUtilities
 {
     /// <summary>
     /// Determines if the given type is a nullable value type (e.g., int?, DateTime?).
@@ -91,5 +92,75 @@ internal static class TypeCheckResolver
             }
         }
         return false;
+    }
+
+    internal static string GetTypeKeyword(INamedTypeSymbol type)
+    {
+        if (type.IsRecord)
+        {
+            return type.TypeKind == TypeKind.Struct ? "record struct" : "record class";
+        }
+
+        return type.TypeKind == TypeKind.Struct ? "struct" : "class";
+    }
+
+    internal static string GetTypeConstraints(INamedTypeSymbol type)
+    {
+        if (type.TypeParameters is not { Length: > 0 })
+        {
+            return string.Empty;
+        }
+
+        var constraints = new List<string>();
+
+        foreach (var typeParam in type.TypeParameters)
+        {
+            var paramConstraints = new List<string>();
+
+            // Reference type constraint
+            if (typeParam.HasReferenceTypeConstraint)
+            {
+                paramConstraints.Add("class");
+            }
+
+            // Value type constraint
+            if (typeParam.HasValueTypeConstraint)
+            {
+                paramConstraints.Add("struct");
+            }
+
+            // Unmanaged constraint
+            if (typeParam.HasUnmanagedTypeConstraint)
+            {
+                paramConstraints.Add("unmanaged");
+            }
+
+            // Not null constraint
+            if (typeParam.HasNotNullConstraint)
+            {
+                paramConstraints.Add("notnull");
+            }
+
+            // Type constraints (base class, interfaces)
+            foreach (var constraintType in typeParam.ConstraintTypes)
+            {
+                paramConstraints.Add(
+                    constraintType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)
+                );
+            }
+
+            // Constructor constraint (must come last)
+            if (typeParam.HasConstructorConstraint)
+            {
+                paramConstraints.Add("new()");
+            }
+
+            if (paramConstraints is { Count: > 0 })
+            {
+                constraints.Add($"where {typeParam.Name} : {string.Join(", ", paramConstraints)}");
+            }
+        }
+
+        return string.Join(" ", constraints);
     }
 }

@@ -71,7 +71,7 @@ internal static class PropertyAnalyzer
                 DiagnosticReporter.ReportMissingAttributeOption(
                     location,
                     propertyData.PropertyName,
-                    propertyData.PropertyTypeDisplayString,
+                    propertyData.PropertyType.Name,
                     diagnosticData.RequiredOption.RequiredOptionsName
                 )
             );

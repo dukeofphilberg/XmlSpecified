@@ -17,7 +17,7 @@ internal readonly record struct PropertyClass(string Keyword, string Name)
         while (containingType != null && IsAllowedKind(containingType.TypeKind))
         {
             // Build the keyword (class/struct/record)
-            var keyword = GetTypeKeyword(containingType);
+            var keyword = TypeUtilities.GetTypeKeyword(containingType);
 
             // Build the name with type parameters if generic
             var name = containingType.Name;
@@ -27,7 +27,7 @@ internal readonly record struct PropertyClass(string Keyword, string Name)
             }
 
             // Extract constraints from type parameters
-            var constraints = GetTypeConstraints(containingType);
+            var constraints = TypeUtilities.GetTypeConstraints(containingType);
 
             parentClasses.Add(new PropertyClass { Keyword = keyword, Name = name });
 
@@ -42,74 +42,4 @@ internal readonly record struct PropertyClass(string Keyword, string Name)
     }
 
     private static bool IsAllowedKind(TypeKind kind) => kind is TypeKind.Class or TypeKind.Struct;
-
-    private static string GetTypeKeyword(INamedTypeSymbol type)
-    {
-        if (type.IsRecord)
-        {
-            return type.TypeKind == TypeKind.Struct ? "record struct" : "record class";
-        }
-
-        return type.TypeKind == TypeKind.Struct ? "struct" : "class";
-    }
-
-    private static string GetTypeConstraints(INamedTypeSymbol type)
-    {
-        if (type.TypeParameters is not { Length: > 0 })
-        {
-            return string.Empty;
-        }
-
-        var constraints = new List<string>();
-
-        foreach (var typeParam in type.TypeParameters)
-        {
-            var paramConstraints = new List<string>();
-
-            // Reference type constraint
-            if (typeParam.HasReferenceTypeConstraint)
-            {
-                paramConstraints.Add("class");
-            }
-
-            // Value type constraint
-            if (typeParam.HasValueTypeConstraint)
-            {
-                paramConstraints.Add("struct");
-            }
-
-            // Unmanaged constraint
-            if (typeParam.HasUnmanagedTypeConstraint)
-            {
-                paramConstraints.Add("unmanaged");
-            }
-
-            // Not null constraint
-            if (typeParam.HasNotNullConstraint)
-            {
-                paramConstraints.Add("notnull");
-            }
-
-            // Type constraints (base class, interfaces)
-            foreach (var constraintType in typeParam.ConstraintTypes)
-            {
-                paramConstraints.Add(
-                    constraintType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)
-                );
-            }
-
-            // Constructor constraint (must come last)
-            if (typeParam.HasConstructorConstraint)
-            {
-                paramConstraints.Add("new()");
-            }
-
-            if (paramConstraints is { Count: > 0 })
-            {
-                constraints.Add($"where {typeParam.Name} : {string.Join(", ", paramConstraints)}");
-            }
-        }
-
-        return string.Join(" ", constraints);
-    }
 }

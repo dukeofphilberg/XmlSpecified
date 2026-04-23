@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using XmlSpecified.Generator.Models;
 
 namespace XmlSpecified.Generator.Utilities;
@@ -10,54 +11,36 @@ namespace XmlSpecified.Generator.Utilities;
 internal sealed class SpecifiedCodeBuilder
 {
     private readonly PropertyContainer _propertyContainer;
-    private readonly List<PropertyInfo> _properties;
+    private readonly List<PropertyData> _properties;
     private readonly string _version;
-    private bool _addLinqUsingStatement;
 
     /// <summary>
     /// Initializes a new instance of the SpecifiedCodeBuilder.
     /// </summary>
-    public SpecifiedCodeBuilder(PropertyContainer propertyContainer, string version)
+    internal SpecifiedCodeBuilder(PropertyContainer propertyContainer, string version)
     {
         _propertyContainer = propertyContainer;
-        _properties = new List<PropertyInfo>();
+        _properties = new List<PropertyData>();
         _version = version;
-        _addLinqUsingStatement = false;
-    }
-
-    /// <summary>
-    /// Information about a property to generate a Specified property for.
-    /// </summary>
-    private readonly record struct PropertyInfo
-    {
-        public string Name { get; init; }
-        public string CheckExpression { get; init; }
     }
 
     /// <summary>
     /// Adds a property to generate a Specified property for.
     /// </summary>
-    public void AddProperty(PropertyData propertyData)
+    internal void AddProperty(PropertyData propertyData)
     {
-        _properties.Add(
-            new PropertyInfo
-            {
-                Name = propertyData.PropertyName,
-                CheckExpression = ExpressionGenerator.GenerateCheckExpression(propertyData),
-            }
-        );
-
-        if (propertyData.PropertyType.IsEnumerable)
-        {
-            _addLinqUsingStatement = true;
-        }
+        _properties.Add(propertyData);
     }
 
     /// <summary>
     /// Builds the complete source code.
     /// </summary>
-    public string Build()
+    internal string Build()
     {
+        // Sort properties for deterministic output
+        _properties.Sort((a, b) => StringComparer.Ordinal.Compare(a.PropertyName, b.PropertyName));
+        var usingLinq = _properties.Any(x => x.PropertyType.IsEnumerable);
+
         var sb = new IndentedStringBuilder();
 
         // Header
@@ -65,7 +48,7 @@ internal sealed class SpecifiedCodeBuilder
         sb.AppendLine("#nullable enable");
         sb.AppendLine();
 
-        if (_addLinqUsingStatement)
+        if (usingLinq)
         {
             sb.AppendLine("using System.Linq;");
             sb.AppendLine();
@@ -91,13 +74,12 @@ internal sealed class SpecifiedCodeBuilder
             sb.IncreaseIndent();
         }
 
-        // Sort properties for deterministic output
-        _properties.Sort((a, b) => StringComparer.Ordinal.Compare(a.Name, b.Name));
-
         // Generate each property
         var isFirst = true;
         foreach (var property in _properties)
         {
+            var checkExpression = ExpressionGenerator.GenerateCheckExpression(property);
+
             if (!isFirst)
             {
                 sb.AppendLine();
@@ -106,11 +88,11 @@ internal sealed class SpecifiedCodeBuilder
 
             sb.AppendLine($"/// <summary>");
             sb.AppendLine(
-                $"/// Gets a value indicating whether <see cref=\"{property.Name}\"/> should be serialized."
+                $"/// Gets a value indicating whether <see cref=\"{property.PropertyName}\"/> should be serialized."
             );
             sb.AppendLine($"/// </summary>");
             sb.AppendLine($"[global::System.Xml.Serialization.XmlIgnore]");
-            sb.AppendLine($"public bool {property.Name}Specified => {property.CheckExpression};");
+            sb.AppendLine($"public bool {property.PropertyName}Specified => {checkExpression};");
         }
 
         // Close classes
