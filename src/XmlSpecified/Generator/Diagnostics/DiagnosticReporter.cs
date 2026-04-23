@@ -45,19 +45,19 @@ internal static class DiagnosticReporter
         Diagnostic.Create(DiagnosticDescriptors.StaticProperty, location, propertyName);
 
     /// <summary>
-    /// Creates a diagnostic for a missing required option.
+    /// Creates a diagnostic for a missing required attribute option.
     /// </summary>
-    internal static Diagnostic ReportMissingRequiredOption(
+    internal static Diagnostic ReportMissingAttributeOption(
         Location location,
         string propertyName,
         string typeName,
-        string requiredOption
+        string attributeOptionName
     ) =>
         Diagnostic.Create(
-            DiagnosticDescriptors.MissingRequiredOption,
+            DiagnosticDescriptors.MissingRequiredAttributeOption,
             location,
             propertyName,
             typeName,
-            requiredOption
+            attributeOptionName
         );
 }

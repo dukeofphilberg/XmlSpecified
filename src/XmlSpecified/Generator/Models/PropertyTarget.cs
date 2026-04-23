@@ -12,14 +12,15 @@ internal readonly record struct PropertyTarget(
     {
         var symbol = (IPropertySymbol)context.TargetSymbol;
         var attributes = symbol.GetAttributes();
-        var attributeValues = SpecifiedOptions.Create(attributes[0]);
+        var attributeOptions = AttributeOptions.Create(attributes[0]);
         var typeInfo = TypeInfo.Create(symbol.Type);
+        var requiredOption = RequiredAttributeOption.Create(typeInfo, attributeOptions);
 
         return new PropertyTarget
         {
             PropertyContainer = PropertyContainer.Create(symbol),
-            PropertyData = PropertyData.Create(symbol, typeInfo, attributeValues),
-            DiagnosticData = DiagnosticData.Create(symbol, typeInfo, attributeValues),
+            PropertyData = PropertyData.Create(symbol, typeInfo, attributeOptions),
+            DiagnosticData = DiagnosticData.Create(symbol, requiredOption),
         };
     }
 }

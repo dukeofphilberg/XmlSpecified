@@ -64,9 +64,9 @@ internal static class DiagnosticDescriptors
     /// <summary>
     /// XSG005: Missing required option for non-nullable type.
     /// </summary>
-    internal static readonly DiagnosticDescriptor MissingRequiredOption = new(
+    internal static readonly DiagnosticDescriptor MissingRequiredAttributeOption = new(
         id: "XSG005",
-        title: "Missing required option",
+        title: "Missing required attribute option",
         messageFormat: "Property '{0}' of type '{1}' requires {2} to be specified",
         category: Category,
         defaultSeverity: DiagnosticSeverity.Error,

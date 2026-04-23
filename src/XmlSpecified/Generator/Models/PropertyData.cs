@@ -9,18 +9,18 @@ internal readonly record struct PropertyData(
     string PropertyName,
     TypeInfo PropertyType,
     string PropertyTypeDisplayString,
-    SpecifiedOptions AttributeValues
+    AttributeOptions AttributeOptions
 )
 {
     internal static PropertyData Create(
         IPropertySymbol symbol,
         TypeInfo typeInfo,
-        SpecifiedOptions attributeValues
+        AttributeOptions attributeOptions
     )
     {
         return new PropertyData
         {
-            AttributeValues = attributeValues,
+            AttributeOptions = attributeOptions,
             PropertyName = symbol.Name,
             PropertyType = typeInfo,
             PropertyTypeDisplayString = symbol.Type.ToDisplayString(),

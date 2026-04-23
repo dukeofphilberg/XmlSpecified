@@ -9,13 +9,12 @@ internal readonly record struct DiagnosticData(
     bool IsStatic,
     bool IsPartial,
     bool HasSpecifiedPropertyExists,
-    RequiredOption RequiredOption
+    RequiredAttributeOption RequiredOption
 )
 {
     internal static DiagnosticData Create(
         IPropertySymbol symbol,
-        TypeInfo typeInfo,
-        SpecifiedOptions attributeValues
+        RequiredAttributeOption requiredOption
     )
     {
         return new DiagnosticData
@@ -25,7 +24,7 @@ internal readonly record struct DiagnosticData(
             IsStatic = symbol.IsStatic,
             IsPartial = symbol.IsContainingClassPartial(),
             HasSpecifiedPropertyExists = symbol.SpecifiedPropertyExists(),
-            RequiredOption = RequiredOption.Create(typeInfo, attributeValues),
+            RequiredOption = requiredOption,
         };
     }
 }

@@ -10,7 +10,7 @@ internal static class ExpressionGenerator
     internal static string GenerateCheckExpression(PropertyData propertyData)
     {
         var propertyType = propertyData.PropertyType;
-        var attributeValues = propertyData.AttributeValues;
+        var attributeValues = propertyData.AttributeOptions;
         var propertyName = propertyData.PropertyName;
 
         // Check for nullable value type first

@@ -5,14 +5,14 @@ namespace XmlSpecified.Generator.Models;
 /// <summary>
 /// Attribute values extracted from an XmlSpecified attribute.
 /// </summary>
-internal readonly record struct SpecifiedOptions(
+internal readonly record struct AttributeOptions(
     NumericOptions? NumericOptions,
     StringOptions? StringOptions,
     BoolOptions? BoolOptions,
     CollectionOptions? CollectionOptions
 )
 {
-    internal static SpecifiedOptions Create(AttributeData attribute)
+    internal static AttributeOptions Create(AttributeData attribute)
     {
         NumericOptions? numericOptions = null;
         StringOptions? stringOptions = null;
@@ -43,7 +43,7 @@ internal readonly record struct SpecifiedOptions(
             }
         }
 
-        return new SpecifiedOptions()
+        return new AttributeOptions()
         {
             NumericOptions = numericOptions,
             StringOptions = stringOptions,
