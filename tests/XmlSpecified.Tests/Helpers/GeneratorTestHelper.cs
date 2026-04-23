@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using XmlSpecified.Generator;
@@ -16,7 +15,7 @@ internal static class GeneratorTestHelper
         SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
 
         // Get all assemblies needed for a working compilation
-        var assemblyPath = System.IO.Path.GetDirectoryName(typeof(object).Assembly.Location)!;
+        var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location)!;
         var references = new List<MetadataReference>
         {
             MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
@@ -50,7 +49,6 @@ internal static class GeneratorTestHelper
     {
         var driver = GetDriver(source);
 
-        // Use verify to snapshot test the source generator output!
         return Verifier.Verify(driver);
     }
 }

@@ -1,3 +1,5 @@
+using Microsoft.CodeAnalysis;
+
 namespace XmlSpecified.Generator.Models;
 
 /// <summary>
@@ -5,7 +7,19 @@ namespace XmlSpecified.Generator.Models;
 /// </summary>
 internal readonly record struct PropertyData(
     string PropertyName,
-    PropertyType PropertyType,
+    TypeInfo PropertyType,
     string PropertyTypeDisplayString,
-    AttributeValues AttributeValues
-);
+    SpecifiedOptions AttributeValues
+)
+{
+    internal static PropertyData Create(IPropertySymbol symbol, SpecifiedOptions attributeValues)
+    {
+        return new PropertyData
+        {
+            AttributeValues = attributeValues,
+            PropertyName = symbol.Name,
+            PropertyType = TypeInfo.Create(symbol.Type),
+            PropertyTypeDisplayString = symbol.Type.ToDisplayString(),
+        };
+    }
+}

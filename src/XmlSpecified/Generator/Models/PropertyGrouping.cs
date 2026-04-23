@@ -8,5 +8,5 @@ namespace XmlSpecified.Generator.Models;
 /// </summary>
 internal readonly record struct PropertyGrouping(
     PropertyContainer Container,
-    EquatableArray<PropertyResult> Properties
+    EquatableArray<PropertyTarget> Properties
 );

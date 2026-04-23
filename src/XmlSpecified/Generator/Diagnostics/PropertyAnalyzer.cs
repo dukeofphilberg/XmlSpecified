@@ -65,15 +65,14 @@ internal static class PropertyAnalyzer
         }
 
         // XSG005: Missing required option
-
-        if (!diagnosticData.HasRequiredOption)
+        if (!diagnosticData.RequiredOption.IsRequired)
         {
             diagnostics.Add(
                 DiagnosticReporter.ReportMissingRequiredOption(
                     location,
                     propertyData.PropertyName,
                     propertyData.PropertyTypeDisplayString,
-                    diagnosticData.RequiredOptionName ?? string.Empty
+                    diagnosticData.RequiredOption.OptionName
                 )
             );
         }

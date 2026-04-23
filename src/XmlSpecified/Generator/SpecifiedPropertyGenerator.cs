@@ -15,7 +15,6 @@ namespace XmlSpecified.Generator;
 [Generator(LanguageNames.CSharp)]
 public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
 {
-    private const string AttributeName = "XmlSpecified";
     private const string AttributeFullName = "XmlSpecified.XmlSpecifiedAttribute";
     private const string Version = "0.1.0";
 
@@ -26,7 +25,7 @@ public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
         var allProperties = context.SyntaxProvider.ForAttributeWithMetadataName(
             AttributeFullName,
             predicate: (node, _) => node is BasePropertyDeclarationSyntax,
-            transform: (ctx, _) => ModelsFactory.CreatePropertyTarget(ctx)
+            transform: (ctx, _) => PropertyTarget.Create(ctx)
         );
 
         // Group properties by containing PropertyContainer
@@ -40,9 +39,8 @@ public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
                         .Select(g => new PropertyGrouping
                         {
                             Container = g.Key,
-                            Properties = new EquatableArray<PropertyResult>(
-                                g.Select(p => new PropertyResult(p.PropertyData, p.DiagnosticData))
-                                    .ToArray()
+                            Properties = new EquatableArray<PropertyTarget>(
+                                g.Select(p => p).ToArray()
                             ),
                         })
             );
@@ -76,7 +74,7 @@ public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
 
             foreach (var property in properties)
             {
-                var (propertyData, diagnosticData) = property;
+                var (container, propertyData, diagnosticData) = property;
                 var analysisResult = PropertyAnalyzer.Analyze(
                     propertyContainer,
                     propertyData,

@@ -10,10 +10,20 @@ internal readonly record struct PropertyLocation(
     LinePositionSpan LineSpan
 ) : IEquatable<PropertyLocation>
 {
-    public Location GetLocation()
+    internal static PropertyLocation Create(IPropertySymbol symbol)
     {
-        return Location.Create(FilePath, TextSpan, LineSpan);
+        var location = symbol.Locations[0];
+        var lineSpan = location.GetLineSpan();
+
+        return new PropertyLocation
+        {
+            FilePath = lineSpan.Path,
+            TextSpan = location.SourceSpan,
+            LineSpan = lineSpan.Span,
+        };
     }
+
+    internal Location GetLocation() => Location.Create(FilePath, TextSpan, LineSpan);
 
     public bool Equals(PropertyLocation other)
     {

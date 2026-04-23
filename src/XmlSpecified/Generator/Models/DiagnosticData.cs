@@ -1,5 +1,4 @@
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using XmlSpecified.Generator.Utilities;
 
 namespace XmlSpecified.Generator.Models;
@@ -10,6 +9,19 @@ internal readonly record struct DiagnosticData(
     bool IsStatic,
     bool IsPartial,
     bool HasSpecifiedPropertyExists,
-    string? RequiredOptionName,
-    bool HasRequiredOption
-);
+    RequiredOption RequiredOption
+)
+{
+    internal static DiagnosticData Create(IPropertySymbol symbol, SpecifiedOptions attributeValues)
+    {
+        return new DiagnosticData
+        {
+            Location = PropertyLocation.Create(symbol),
+            HasSetter = symbol.SetMethod != null,
+            IsStatic = symbol.IsStatic,
+            IsPartial = symbol.IsContainingClassPartial(),
+            HasSpecifiedPropertyExists = symbol.SpecifiedPropertyExists(),
+            RequiredOption = RequiredOption.Create(symbol, attributeValues),
+        };
+    }
+}
