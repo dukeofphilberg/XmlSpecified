@@ -36,7 +36,7 @@ internal static class GeneratorTestHelper
         );
 
         // Create an instance of our source generator
-        var generator = new SpecifiedPropertyGenerator();
+        var generator = new XmlSpecifiedGenerator();
 
         // The GeneratorDriver is used to run our generator against a compilation
         GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);

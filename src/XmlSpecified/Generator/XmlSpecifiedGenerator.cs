@@ -13,7 +13,7 @@ namespace XmlSpecified.Generator;
 /// for properties decorated with [XmlSpecified].
 /// </summary>
 [Generator(LanguageNames.CSharp)]
-public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
+public sealed class XmlSpecifiedGenerator : IIncrementalGenerator
 {
     private const string AttributeFullName = "XmlSpecified.XmlSpecifiedAttribute";
     private const string Version = "0.1.0";
@@ -99,7 +99,7 @@ public sealed class SpecifiedPropertyGenerator : IIncrementalGenerator
             if (hasCode)
             {
                 var sourceCode = builder.Build();
-                var fileName = Utilities.Utilities.GetFileName(propertyContainer);
+                var fileName = GeneratorUtilities.GetFileName(propertyContainer);
                 context.AddSource(fileName, sourceCode);
             }
         }

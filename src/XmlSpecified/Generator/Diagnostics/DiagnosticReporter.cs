@@ -11,7 +11,8 @@ internal static class DiagnosticReporter
     /// <summary>
     /// Creates a diagnostic for a generator error, including the exception details.
     /// </summary>
-    internal static Diagnostic ReportGeneratorError(Exception ex) => Diagnostic.Create(DiagnosticDescriptors.GeneratorError, Location.None, ex.ToString())
+    internal static Diagnostic ReportGeneratorError(Exception ex) =>
+        Diagnostic.Create(DiagnosticDescriptors.GeneratorError, Location.None, ex.ToString());
 
     /// <summary>
     /// Creates a diagnostic for a non-partial class.

@@ -3,10 +3,10 @@ using XmlSpecified.Generator.Models;
 
 namespace XmlSpecified.Generator.Utilities;
 
-internal static class Utilities
+internal static class GeneratorUtilities
 {
     /// <summary>
-    /// Gets the generated file name for the PropertyContainer.
+    /// Gets the generated file name for given <see cref="PropertyContainer"/>.
     /// </summary>
     internal static string GetFileName(PropertyContainer propertyContainer)
     {
