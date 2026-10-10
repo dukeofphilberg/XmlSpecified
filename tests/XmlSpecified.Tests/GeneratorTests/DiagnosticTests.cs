@@ -106,7 +106,7 @@ public class DiagnosticTests
     }
 
     [Fact]
-    public Task Generator_MissingRequiredOption_NonNullableInt_ReportsXSG006()
+    public Task Generator_MissingRequiredOption_NonNullableInt_ReportsXSG005()
     {
         // Arrange
         var source = """
@@ -126,7 +126,7 @@ public class DiagnosticTests
     }
 
     [Fact]
-    public Task Generator_MissingRequiredOption_String_ReportsXSG006()
+    public Task Generator_MissingRequiredOption_String_ReportsXSG005()
     {
         // Arrange
         var source = """
@@ -146,7 +146,7 @@ public class DiagnosticTests
     }
 
     [Fact]
-    public Task Generator_MissingRequiredOption_Bool_ReportsXSG006()
+    public Task Generator_MissingRequiredOption_Bool_ReportsXSG005()
     {
         // Arrange
         var source = """
@@ -166,7 +166,7 @@ public class DiagnosticTests
     }
 
     [Fact]
-    public Task Generator_MissingRequiredOption_Collection_ReportsXSG006()
+    public Task Generator_MissingRequiredOption_Collection_ReportsXSG005()
     {
         // Arrange
         var source = """
@@ -187,7 +187,7 @@ public class DiagnosticTests
     }
 
     [Fact]
-    public Task Generator_NullableType_NoOption_DoesNotReportXSG006()
+    public Task Generator_NullableType_NoOption_DoesNotReportXSG005()
     {
         // Arrange
         var source = """
@@ -207,7 +207,7 @@ public class DiagnosticTests
     }
 
     [Fact]
-    public Task Generator_ReferenceType_NoOption_DoesNotReportXSG006()
+    public Task Generator_ReferenceType_NoOption_DoesNotReportXSG005()
     {
         // Arrange
         var source = """
