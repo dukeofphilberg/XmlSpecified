@@ -67,4 +67,34 @@ internal static class DiagnosticReporter
             typeName,
             attributeOptionName
         );
+
+    /// <summary>
+    /// Creates a diagnostic for an unsupported property type.
+    /// </summary>
+    internal static Diagnostic ReportUnsupportedPropertyType(
+        Location location,
+        string propertyName,
+        string typeName
+    ) =>
+        Diagnostic.Create(
+            DiagnosticDescriptors.UnsupportedPropertyType,
+            location,
+            propertyName,
+            typeName
+        );
+
+    /// <summary>
+    /// Creates a diagnostic for an unsupported containing type.
+    /// </summary>
+    internal static Diagnostic ReportUnsupportedContainingType(
+        Location location,
+        string propertyName,
+        string typeName
+    ) =>
+        Diagnostic.Create(
+            DiagnosticDescriptors.UnsupportedContainingType,
+            location,
+            propertyName,
+            typeName
+        );
 }

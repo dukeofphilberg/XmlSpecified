@@ -84,4 +84,30 @@ internal static class DiagnosticDescriptors
         isEnabledByDefault: true,
         description: "Non-nullable value types (bool, int, string, collections) require an explicit option to determine when they are considered 'specified'."
     );
+
+    /// <summary>
+    /// XSG006: Property type is not supported.
+    /// </summary>
+    internal static readonly DiagnosticDescriptor UnsupportedPropertyType = new(
+        id: "XSG006",
+        title: "Unsupported property type",
+        messageFormat: "Property '{0}' of type '{1}' is not supported. Use a nullable type or write the Specified property manually.",
+        category: CategoryUsage,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        description: "Non-nullable value types other than bool and numeric types (e.g. enums, DateTime, Guid, structs) have no 'unspecified' state the generator can check."
+    );
+
+    /// <summary>
+    /// XSG007: Containing type is not supported.
+    /// </summary>
+    internal static readonly DiagnosticDescriptor UnsupportedContainingType = new(
+        id: "XSG007",
+        title: "Unsupported containing type",
+        messageFormat: "Property '{0}' is declared in '{1}', which is not a class or struct, or is nested in a type that is not. [XmlSpecified] is only supported on class and struct members.",
+        category: CategoryUsage,
+        defaultSeverity: DiagnosticSeverity.Error,
+        isEnabledByDefault: true,
+        description: "The generator can only add Specified properties to classes, structs and records, including nested ones."
+    );
 }

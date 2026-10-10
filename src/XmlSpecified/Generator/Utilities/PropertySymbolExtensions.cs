@@ -1,19 +1,39 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using XmlSpecified.Generator.Models;
 
 namespace XmlSpecified.Generator.Utilities;
 
 internal static class PropertySymbolExtensions
 {
     /// <summary>
-    /// Checks if the containing class is partial.
+    /// Checks the containing type and every type it is nested in for being partial and
+    /// being a class or struct, stopping at the first type that fails either check.
     /// </summary>
-    internal static bool IsContainingClassPartial(this IPropertySymbol symbol)
+    internal static ContainingTypeInfo AnalyzeContainingTypes(this IPropertySymbol symbol)
     {
-        var containingType = symbol.ContainingType;
+        var type = symbol.ContainingType;
 
+        while (type is not null)
+        {
+            var isPartial = IsPartial(type);
+            var isSupported = type.TypeKind is TypeKind.Class or TypeKind.Struct;
+
+            if (!isPartial || !isSupported)
+            {
+                return new ContainingTypeInfo(isPartial, isSupported);
+            }
+
+            type = type.ContainingType;
+        }
+
+        return new ContainingTypeInfo(IsPartial: true, IsSupported: true);
+    }
+
+    private static bool IsPartial(INamedTypeSymbol type)
+    {
         // Check all declarations of the type
-        foreach (var syntaxRef in containingType.DeclaringSyntaxReferences)
+        foreach (var syntaxRef in type.DeclaringSyntaxReferences)
         {
             if (syntaxRef.GetSyntax() is TypeDeclarationSyntax typeDecl)
             {

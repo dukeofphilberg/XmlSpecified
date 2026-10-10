@@ -6,6 +6,7 @@ namespace XmlSpecified.Generator.Models;
 internal readonly record struct DiagnosticData(
     PropertyLocation Location,
     string ContainingTypeName,
+    bool IsContainingTypeSupported,
     bool HasSetter,
     bool IsStatic,
     bool IsPartial,
@@ -18,13 +19,16 @@ internal readonly record struct DiagnosticData(
         RequiredAttributeOption requiredOption
     )
     {
+        var containingTypeInfo = symbol.AnalyzeContainingTypes();
+
         return new DiagnosticData
         {
             Location = PropertyLocation.Create(symbol),
             ContainingTypeName = symbol.ContainingType.Name,
+            IsContainingTypeSupported = containingTypeInfo.IsSupported,
             HasSetter = symbol.SetMethod != null,
             IsStatic = symbol.IsStatic,
-            IsPartial = symbol.IsContainingClassPartial(),
+            IsPartial = containingTypeInfo.IsPartial,
             HasSpecifiedPropertyExists = symbol.SpecifiedPropertyExists(),
             RequiredOption = requiredOption,
         };
