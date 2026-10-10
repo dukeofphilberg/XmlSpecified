@@ -13,7 +13,8 @@ public class TestInitializer
         {
             if (line.Contains("global::System.CodeDom.Compiler.GeneratedCodeAttribute"))
             {
-                return "    [global::System.CodeDom.Compiler.GeneratedCodeAttribute(\"XmlSpecified\")]";
+                var indent = line.Substring(0, line.Length - line.TrimStart().Length);
+                return indent + "[global::System.CodeDom.Compiler.GeneratedCodeAttribute(\"XmlSpecified\")]";
             }
 
             return line;
