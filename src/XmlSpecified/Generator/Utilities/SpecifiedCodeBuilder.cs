@@ -65,10 +65,6 @@ internal sealed class SpecifiedCodeBuilder
         // Open classes
         foreach (var parentClass in _propertyContainer.PropertyClasses)
         {
-            sb.AppendLine($"[global::System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]");
-            sb.AppendLine(
-                $"[global::System.CodeDom.Compiler.GeneratedCodeAttribute(\"XmlSpecified\", \"{_version}\")]"
-            );
             sb.AppendLine($"partial {parentClass.Keyword} {parentClass.Name}");
             sb.AppendLine("{");
             sb.IncreaseIndent();
@@ -79,6 +75,7 @@ internal sealed class SpecifiedCodeBuilder
         foreach (var property in _properties)
         {
             var checkExpression = ExpressionGenerator.GenerateCheckExpression(property);
+            var propertyName = SyntaxUtilities.EscapeIdentifier(property.PropertyName);
 
             if (!isFirst)
             {
@@ -88,11 +85,15 @@ internal sealed class SpecifiedCodeBuilder
 
             sb.AppendLine($"/// <summary>");
             sb.AppendLine(
-                $"/// Gets a value indicating whether <see cref=\"{property.PropertyName}\"/> should be serialized."
+                $"/// Gets a value indicating whether <see cref=\"{propertyName}\"/> should be serialized."
             );
             sb.AppendLine($"/// </summary>");
             sb.AppendLine($"[global::System.Xml.Serialization.XmlIgnore]");
-            sb.AppendLine($"public bool {property.PropertyName}Specified => {checkExpression};");
+            sb.AppendLine($"[global::System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]");
+            sb.AppendLine(
+                $"[global::System.CodeDom.Compiler.GeneratedCodeAttribute(\"XmlSpecified\", \"{_version}\")]"
+            );
+            sb.AppendLine($"public bool {propertyName}Specified => {checkExpression};");
         }
 
         // Close classes
