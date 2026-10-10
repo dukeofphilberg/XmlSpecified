@@ -1,4 +1,6 @@
 using System.Diagnostics;
+using Microsoft.CodeAnalysis.CSharp;
+using XmlSpecified.Generator;
 
 namespace XmlSpecified.Tests.GeneratorTests;
 
@@ -8,11 +10,12 @@ public class PerformanceTests
     public void Generator_With100Properties_CompletesInUnder2Seconds()
     {
         // Arrange
-        var source = GenerateSourceWith100Properties();
+        var compilation = GeneratorTestHelper.CreateCompilation(GenerateSourceWith100Properties());
+        var driver = CSharpGeneratorDriver.Create(new XmlSpecifiedGenerator());
         var stopwatch = Stopwatch.StartNew();
 
         // Act
-        _ = GeneratorTestHelper.GetDriver(source);
+        _ = driver.RunGenerators(compilation);
         stopwatch.Stop();
 
         // Assert

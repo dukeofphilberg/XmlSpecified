@@ -9,46 +9,65 @@ namespace XmlSpecified.Tests.Helpers;
 /// </summary>
 internal static class GeneratorTestHelper
 {
-    internal static GeneratorDriver GetDriver(string source)
-    {
-        // Parse the provided string into a C# syntax tree
-        SyntaxTree syntaxTree = CSharpSyntaxTree.ParseText(source);
-
-        // Get all assemblies needed for a working compilation
-        var assemblyPath = Path.GetDirectoryName(typeof(object).Assembly.Location)!;
-        var references = new List<MetadataReference>
-        {
-            MetadataReference.CreateFromFile(typeof(object).Assembly.Location),
+    /// <summary>
+    /// All framework assemblies of the test runtime plus XmlSpecified, so test sources and
+    /// generated code can use any BCL type. Built once, as loading the references is expensive.
+    /// </summary>
+    private static readonly Lazy<MetadataReference[]> References = new(() =>
+        [
+            .. ((string)AppContext.GetData("TRUSTED_PLATFORM_ASSEMBLIES")!)
+                .Split(Path.PathSeparator)
+                .Select(path => MetadataReference.CreateFromFile(path)),
             MetadataReference.CreateFromFile(typeof(XmlSpecifiedAttribute).Assembly.Location),
-            MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Runtime.dll")),
-            MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "System.Collections.dll")),
-            MetadataReference.CreateFromFile(Path.Combine(assemblyPath, "netstandard.dll")),
-            MetadataReference.CreateFromFile(
-                Path.Combine(assemblyPath, "System.ComponentModel.dll")
-            ),
-        };
+        ]
+    );
 
-        // Create a Roslyn compilation for the syntax tree.
-        CSharpCompilation compilation = CSharpCompilation.Create(
+    /// <summary>
+    /// Creates a compilation of the given source referencing the full framework.
+    /// </summary>
+    internal static CSharpCompilation CreateCompilation(string source) =>
+        CSharpCompilation.Create(
             assemblyName: "Tests",
-            syntaxTrees: [syntaxTree],
-            references: references
+            syntaxTrees: [CSharpSyntaxTree.ParseText(source)],
+            references: References.Value,
+            options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary)
         );
 
-        // Create an instance of our source generator
-        var generator = new XmlSpecifiedGenerator();
+    /// <summary>
+    /// Runs the generator and returns the generator result plus the errors of the
+    /// compilation including the generated sources.
+    /// </summary>
+    internal static (GeneratorDriverRunResult Result, Diagnostic[] CompilationErrors) RunAndCompile(
+        string source
+    )
+    {
+        var result = CSharpGeneratorDriver
+            .Create(new XmlSpecifiedGenerator())
+            .RunGeneratorsAndUpdateCompilation(
+                CreateCompilation(source),
+                out var outputCompilation,
+                out _
+            )
+            .GetRunResult();
 
-        // The GeneratorDriver is used to run our generator against a compilation
-        GeneratorDriver driver = CSharpGeneratorDriver.Create(generator);
+        var errors = outputCompilation
+            .GetDiagnostics()
+            .Where(d => d.Severity == DiagnosticSeverity.Error)
+            .ToArray();
 
-        // Run the source generator
-        return driver.RunGenerators(compilation);
+        return (result, errors);
     }
 
+    /// <summary>
+    /// Snapshots the generated sources and generator diagnostics, after asserting
+    /// the generated code compiles.
+    /// </summary>
     internal static Task Verify(string source)
     {
-        var driver = GetDriver(source);
+        var (result, errors) = RunAndCompile(source);
 
-        return Verifier.Verify(driver);
+        Assert.Empty(errors);
+
+        return Verifier.Verify(result);
     }
 }

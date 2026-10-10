@@ -33,7 +33,7 @@ internal static class PropertyAnalyzer
             );
 
             // The remaining checks don't apply when there is no class to generate into
-            return new PropertyAnalysisResult { Diagnostics = [.. diagnostics] };
+            return new PropertyAnalysisResult([.. diagnostics], ShouldGenerate: false);
         }
 
         // XSG001: Non-partial class
@@ -48,8 +48,9 @@ internal static class PropertyAnalyzer
             );
         }
 
-        // XSG002: Duplicate Specified property
-        if (diagnosticData.HasSpecifiedPropertyExists)
+        // XSG002: A member with the Specified name already exists.
+        // Only a warning, as the user's own member works, but there is nothing to generate.
+        if (diagnosticData.HasSpecifiedMember)
         {
             diagnostics.Add(
                 DiagnosticReporter.ReportDuplicateSpecifiedProperty(
@@ -58,6 +59,8 @@ internal static class PropertyAnalyzer
                     className
                 )
             );
+
+            return new PropertyAnalysisResult([.. diagnostics], ShouldGenerate: false);
         }
 
         // XSG003: Read-only property
@@ -102,6 +105,8 @@ internal static class PropertyAnalyzer
             );
         }
 
-        return new PropertyAnalysisResult { Diagnostics = [.. diagnostics] };
+        var hasError = diagnostics.Exists(d => d.Severity == DiagnosticSeverity.Error);
+
+        return new PropertyAnalysisResult([.. diagnostics], ShouldGenerate: !hasError);
     }
 }

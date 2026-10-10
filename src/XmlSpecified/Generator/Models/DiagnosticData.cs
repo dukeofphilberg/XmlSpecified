@@ -10,7 +10,7 @@ internal readonly record struct DiagnosticData(
     bool HasSetter,
     bool IsStatic,
     bool IsPartial,
-    bool HasSpecifiedPropertyExists,
+    bool HasSpecifiedMember,
     RequiredAttributeOption RequiredOption
 )
 {
@@ -29,7 +29,7 @@ internal readonly record struct DiagnosticData(
             HasSetter = symbol.SetMethod != null,
             IsStatic = symbol.IsStatic,
             IsPartial = containingTypeInfo.IsPartial,
-            HasSpecifiedPropertyExists = symbol.SpecifiedPropertyExists(),
+            HasSpecifiedMember = symbol.SpecifiedMemberExists(),
             RequiredOption = requiredOption,
         };
     }

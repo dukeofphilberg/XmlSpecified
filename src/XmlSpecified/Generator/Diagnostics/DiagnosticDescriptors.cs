@@ -34,16 +34,16 @@ internal static class DiagnosticDescriptors
     );
 
     /// <summary>
-    /// XSG002: A Specified property already exists.
+    /// XSG002: A member with the Specified name already exists.
     /// </summary>
     internal static readonly DiagnosticDescriptor DuplicateSpecifiedProperty = new(
         id: "XSG002",
-        title: "Duplicate Specified property",
-        messageFormat: "Property '{0}Specified' already exists in class '{1}'. The generator will not create a duplicate.",
+        title: "Duplicate Specified member",
+        messageFormat: "A member named '{0}Specified' already exists in class '{1}'. The generator will not create a duplicate.",
         category: CategoryUsage,
         defaultSeverity: DiagnosticSeverity.Warning,
         isEnabledByDefault: true,
-        description: "A property with the expected Specified name already exists in the class. The generator will skip generation for this property."
+        description: "A member (property, field, method, ...) with the expected Specified name already exists in the class. The generator will skip generation for this property."
     );
 
     /// <summary>

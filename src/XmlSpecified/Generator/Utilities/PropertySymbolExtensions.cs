@@ -51,21 +51,9 @@ internal static class PropertySymbolExtensions
     }
 
     /// <summary>
-    /// Checks if a Specified property already exists for the given property name.
+    /// Checks if a member of any kind (property, field, method, ...) named [PropertyName]Specified
+    /// already exists, as generating the Specified property would then conflict with it.
     /// </summary>
-    internal static bool SpecifiedPropertyExists(this IPropertySymbol symbol)
-    {
-        var specifiedName = $"{symbol.Name}Specified";
-        var containingType = symbol.ContainingType;
-
-        foreach (var member in containingType.GetMembers())
-        {
-            if (member is IPropertySymbol prop && prop.Name == specifiedName)
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    internal static bool SpecifiedMemberExists(this IPropertySymbol symbol) =>
+        !symbol.ContainingType.GetMembers($"{symbol.Name}Specified").IsEmpty;
 }
