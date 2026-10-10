@@ -13,13 +13,11 @@ internal static class PropertyAnalyzer
     /// Analyzes a property and generates the check expression.
     /// </summary>
     internal static PropertyAnalysisResult Analyze(
-        PropertyContainer propertyContainer,
         PropertyData propertyData,
         DiagnosticData diagnosticData
     )
     {
-        var last = propertyContainer.PropertyClasses.Count - 1;
-        var className = propertyContainer.PropertyClasses.AsSpan()[last].Name;
+        var className = diagnosticData.ContainingTypeName;
         var diagnostics = new List<Diagnostic>();
         var location = diagnosticData.Location.GetLocation();
 

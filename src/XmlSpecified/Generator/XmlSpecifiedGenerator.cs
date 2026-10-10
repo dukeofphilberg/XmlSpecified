@@ -74,12 +74,8 @@ public sealed class XmlSpecifiedGenerator : IIncrementalGenerator
 
             foreach (var property in properties)
             {
-                var (container, propertyData, diagnosticData) = property;
-                var analysisResult = PropertyAnalyzer.Analyze(
-                    propertyContainer,
-                    propertyData,
-                    diagnosticData
-                );
+                var (_, propertyData, diagnosticData) = property;
+                var analysisResult = PropertyAnalyzer.Analyze(propertyData, diagnosticData);
 
                 // Report diagnostics
                 foreach (var diagnostic in analysisResult.Diagnostics)
