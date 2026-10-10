@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 using XmlSpecified.Generator.Utilities;
 
 namespace XmlSpecified.Generator.Models;
 
-internal readonly record struct PropertyClass(string Keyword, string Name)
+internal readonly record struct PropertyClass(string Keyword, string Name, string MetadataName)
 {
     internal static EquatableArray<PropertyClass> Construct(IPropertySymbol propertySymbol)
     {
@@ -20,16 +21,28 @@ internal readonly record struct PropertyClass(string Keyword, string Name)
             var keyword = TypeUtilities.GetTypeKeyword(containingType);
 
             // Build the name with type parameters if generic
-            var name = containingType.Name;
+            var name = SyntaxUtilities.EscapeIdentifier(containingType.Name);
             if (containingType.TypeParameters.Length > 0)
             {
-                name += "<" + string.Join(", ", containingType.TypeParameters) + ">";
+                name +=
+                    "<"
+                    + string.Join(
+                        ", ",
+                        containingType.TypeParameters.Select(t =>
+                            SyntaxUtilities.EscapeIdentifier(t.Name)
+                        )
+                    )
+                    + ">";
             }
 
-            // Extract constraints from type parameters
-            var constraints = TypeUtilities.GetTypeConstraints(containingType);
-
-            parentClasses.Add(new PropertyClass { Keyword = keyword, Name = name });
+            parentClasses.Add(
+                new PropertyClass
+                {
+                    Keyword = keyword,
+                    Name = name,
+                    MetadataName = containingType.MetadataName,
+                }
+            );
 
             // Move to the next outer type
             containingType = containingType.ContainingType;
