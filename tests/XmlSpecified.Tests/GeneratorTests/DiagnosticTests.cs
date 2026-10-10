@@ -23,6 +23,33 @@ public class DiagnosticTests
     }
 
     [Fact]
+    public void Generator_NonPartialOuterClass_ReportsXSG001()
+    {
+        // Arrange
+        var source = """
+            using XmlSpecified;
+
+            namespace TestNamespace;
+
+            public class Outer
+            {
+                public partial class Inner
+                {
+                    [XmlSpecified]
+                    public int? Value { get; set; }
+                }
+            }
+            """;
+
+        // Act
+        var (result, errors) = GeneratorTestHelper.RunAndCompile(source);
+
+        // Assert
+        Assert.Equal(["XSG001"], GeneratorTestHelper.GeneratorDiagnosticIds(result));
+        Assert.Empty(errors);
+    }
+
+    [Fact]
     public Task Generator_DuplicateSpecifiedProperty_ReportsXSG002()
     {
         // Arrange
@@ -43,6 +70,36 @@ public class DiagnosticTests
 
         // Act - Assert
         return GeneratorTestHelper.Verify(source);
+    }
+
+    [Theory]
+    [InlineData("public bool ValueSpecified => true;")]
+    [InlineData("public bool ValueSpecified;")]
+    [InlineData("public bool ValueSpecified() => true;")]
+    public void Generator_ExistingSpecifiedMember_ReportsXSG002AndSkipsGeneration(string member)
+    {
+        // Arrange
+        var source = $$"""
+            using XmlSpecified;
+
+            namespace TestNamespace;
+
+            public partial class TestClass
+            {
+                [XmlSpecified]
+                public int? Value { get; set; }
+
+                {{member}}
+            }
+            """;
+
+        // Act
+        var (result, errors) = GeneratorTestHelper.RunAndCompile(source);
+
+        // Assert
+        Assert.Equal(["XSG002"], GeneratorTestHelper.GeneratorDiagnosticIds(result));
+        Assert.Empty(errors);
+        Assert.Empty(result.GeneratedTrees);
     }
 
     [Fact]
@@ -96,8 +153,8 @@ public class DiagnosticTests
 
             public partial class TestClass
             {
-                [XmlSpecified(NumericOptions.Positive, StringOptions = StringOptions.NonEmpty)]
-                public string Name { get; set; }  // Both options specified
+                [XmlSpecified(NumericOptions.Positive)]
+                public string Name { get; set; }  // Option for the wrong type, StringOptions is missing
             }
             """;
 
@@ -229,5 +286,59 @@ public class DiagnosticTests
 
         // Act - Assert
         return GeneratorTestHelper.Verify(source);
+    }
+
+    [Theory]
+    [InlineData("System.DayOfWeek")]
+    [InlineData("System.DateTime")]
+    [InlineData("MyStruct")]
+    public void Generator_UnsupportedValueType_ReportsXSG006(string type)
+    {
+        // Arrange
+        var source = $$"""
+            using XmlSpecified;
+
+            namespace TestNamespace;
+
+            public struct MyStruct { }
+
+            public partial class TestClass
+            {
+                [XmlSpecified]
+                public {{type}} Value { get; set; }
+            }
+            """;
+
+        // Act
+        var (result, errors) = GeneratorTestHelper.RunAndCompile(source);
+
+        // Assert
+        Assert.Equal(["XSG006"], GeneratorTestHelper.GeneratorDiagnosticIds(result));
+        Assert.Empty(errors);
+        Assert.Empty(result.GeneratedTrees);
+    }
+
+    [Fact]
+    public void Generator_InterfaceProperty_ReportsXSG007()
+    {
+        // Arrange
+        var source = """
+            using XmlSpecified;
+
+            namespace TestNamespace;
+
+            public partial interface IOrder
+            {
+                [XmlSpecified(NumericOptions.Positive)]
+                int Quantity { get; set; }
+            }
+            """;
+
+        // Act
+        var (result, errors) = GeneratorTestHelper.RunAndCompile(source);
+
+        // Assert
+        Assert.Equal(["XSG007"], GeneratorTestHelper.GeneratorDiagnosticIds(result));
+        Assert.Empty(errors);
     }
 }

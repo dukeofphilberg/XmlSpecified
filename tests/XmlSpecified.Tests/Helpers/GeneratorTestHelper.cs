@@ -59,6 +59,18 @@ internal static class GeneratorTestHelper
     }
 
     /// <summary>
+    /// Gets the ids of the diagnostics reported by the generator.
+    /// </summary>
+    internal static string[] GeneratorDiagnosticIds(GeneratorDriverRunResult result) =>
+        [.. result.Diagnostics.Select(d => d.Id)];
+
+    /// <summary>
+    /// Gets all generated sources joined together.
+    /// </summary>
+    internal static string GeneratedSource(GeneratorDriverRunResult result) =>
+        string.Join("\n", result.GeneratedTrees.Select(t => t.ToString()));
+
+    /// <summary>
     /// Snapshots the generated sources and generator diagnostics, after asserting
     /// the generated code compiles.
     /// </summary>

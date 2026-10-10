@@ -53,6 +53,7 @@ public class ReferenceTypeTests
     {
         // Arrange
         var source = """
+            using System;
             using XmlSpecified;
 
             namespace TestNamespace;
