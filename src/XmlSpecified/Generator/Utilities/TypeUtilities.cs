@@ -46,52 +46,68 @@ internal static class TypeUtilities
         type.SpecialType == SpecialType.System_Boolean;
 
     /// <summary>
-    /// Determines if the given type is a collection type (List, ICollection, etc.).
+    /// Determines if the given type is a collection type (List, ICollection, etc.),
+    /// i.e. it exposes a <c>Count</c> property through ICollection&lt;T&gt; or ICollection.
     /// </summary>
-    internal static bool IsCollectionType(ITypeSymbol type)
-    {
-        // Check for common collection interfaces
-        if (type is INamedTypeSymbol namedType)
-        {
-            // Check if it implements ICollection<T> or ICollection
-            foreach (var iface in namedType.AllInterfaces)
-            {
-                var name = iface.OriginalDefinition.ToDisplayString();
-                if (
-                    name
-                    is "System.Collections.Generic.ICollection"
-                        or "System.Collections.Generic.ICollection<T>"
-                )
-                {
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
+    internal static bool IsCollectionType(ITypeSymbol type) =>
+        ImplementsAny(type, SpecialType.System_Collections_Generic_ICollection_T)
+        || ImplementsAny(type, "System.Collections.ICollection");
 
     /// <summary>
-    /// Determines if the given type is a reference type (excluding string and collections).
+    /// Determines if the given type is a non-nullable value type that has no supported check
+    /// (e.g. enums, DateTime, Guid, char or custom structs), which cannot be compared with null.
     /// </summary>
-    internal static bool IsReferenceType(ITypeSymbol type)
-    {
-        return type.IsReferenceType && !IsStringType(type) && !IsCollectionType(type);
-    }
+    internal static bool IsUnsupportedValueType(ITypeSymbol type) =>
+        type.IsValueType && !IsNullableValueType(type) && !IsNumericType(type) && !IsBoolType(type);
 
-    internal static bool IsEnumerable(ITypeSymbol propertyType)
+    /// <summary>
+    /// Determines if the given type implements IEnumerable&lt;T&gt;, so that <c>Enumerable.Any()</c> can be used.
+    /// </summary>
+    internal static bool IsEnumerable(ITypeSymbol type) =>
+        ImplementsAny(type, SpecialType.System_Collections_Generic_IEnumerable_T);
+
+    private static bool ImplementsAny(ITypeSymbol type, SpecialType specialType)
     {
-        if (propertyType is INamedTypeSymbol namedType)
+        foreach (var iface in SelfAndAllInterfaces(type))
         {
-            foreach (var iface in namedType.AllInterfaces)
+            if (iface.OriginalDefinition.SpecialType == specialType)
             {
-                if (iface.OriginalDefinition.ToDisplayString() == "System.Collections.IEnumerable")
-                {
-                    return true;
-                }
+                return true;
             }
         }
+
         return false;
+    }
+
+    private static bool ImplementsAny(ITypeSymbol type, string fullName)
+    {
+        foreach (var iface in SelfAndAllInterfaces(type))
+        {
+            if (iface.OriginalDefinition.ToDisplayString() == fullName)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private static IEnumerable<INamedTypeSymbol> SelfAndAllInterfaces(ITypeSymbol type)
+    {
+        if (type is not INamedTypeSymbol namedType)
+        {
+            yield break;
+        }
+
+        if (namedType.TypeKind == TypeKind.Interface)
+        {
+            yield return namedType;
+        }
+
+        foreach (var iface in namedType.AllInterfaces)
+        {
+            yield return iface;
+        }
     }
 
     internal static string GetTypeKeyword(INamedTypeSymbol type)
@@ -102,65 +118,5 @@ internal static class TypeUtilities
         }
 
         return type.TypeKind == TypeKind.Struct ? "struct" : "class";
-    }
-
-    internal static string GetTypeConstraints(INamedTypeSymbol type)
-    {
-        if (type.TypeParameters is not { Length: > 0 })
-        {
-            return string.Empty;
-        }
-
-        var constraints = new List<string>();
-
-        foreach (var typeParam in type.TypeParameters)
-        {
-            var paramConstraints = new List<string>();
-
-            // Reference type constraint
-            if (typeParam.HasReferenceTypeConstraint)
-            {
-                paramConstraints.Add("class");
-            }
-
-            // Value type constraint
-            if (typeParam.HasValueTypeConstraint)
-            {
-                paramConstraints.Add("struct");
-            }
-
-            // Unmanaged constraint
-            if (typeParam.HasUnmanagedTypeConstraint)
-            {
-                paramConstraints.Add("unmanaged");
-            }
-
-            // Not null constraint
-            if (typeParam.HasNotNullConstraint)
-            {
-                paramConstraints.Add("notnull");
-            }
-
-            // Type constraints (base class, interfaces)
-            foreach (var constraintType in typeParam.ConstraintTypes)
-            {
-                paramConstraints.Add(
-                    constraintType.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat)
-                );
-            }
-
-            // Constructor constraint (must come last)
-            if (typeParam.HasConstructorConstraint)
-            {
-                paramConstraints.Add("new()");
-            }
-
-            if (paramConstraints is { Count: > 0 })
-            {
-                constraints.Add($"where {typeParam.Name} : {string.Join(", ", paramConstraints)}");
-            }
-        }
-
-        return string.Join(" ", constraints);
     }
 }
