@@ -11,8 +11,8 @@ internal readonly record struct PropertyTarget(
     internal static PropertyTarget Create(GeneratorAttributeSyntaxContext context)
     {
         var symbol = (IPropertySymbol)context.TargetSymbol;
-        var attributes = symbol.GetAttributes();
-        var attributeOptions = AttributeOptions.Create(attributes[0]);
+        var attribute = context.Attributes[0];
+        var attributeOptions = AttributeOptions.Create(attribute);
         var typeInfo = TypeInfo.Create(symbol.Type);
         var requiredOption = RequiredAttributeOption.Create(typeInfo, attributeOptions);
 
