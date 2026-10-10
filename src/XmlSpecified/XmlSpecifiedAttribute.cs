@@ -35,25 +35,25 @@ public sealed class XmlSpecifiedAttribute : Attribute
     /// Specifies how numeric values determine the Specified state.
     /// Only applies to non-nullable numeric types. Must be explicitly set for int, long, decimal, double, etc.
     /// </summary>
-    public NumericOptions? NumericOptions { get; init; }
+    public NumericOptions? NumericOptions { get; }
 
     /// <summary>
     /// Specifies how string values determine the Specified state.
     /// Must be explicitly set for string properties.
     /// </summary>
-    public StringOptions? StringOptions { get; init; }
+    public StringOptions? StringOptions { get; }
 
     /// <summary>
     /// Specifies how boolean values determine the Specified state.
     /// Must be explicitly set for bool properties.
     /// </summary>
-    public BoolOptions? BoolOptions { get; init; }
+    public BoolOptions? BoolOptions { get; }
 
     /// <summary>
     /// Specifies how collection values determine the Specified state.
     /// Must be explicitly set for arrays, List&lt;T&gt;, ICollection&lt;T&gt;, etc.
     /// </summary>
-    public CollectionOptions? CollectionOptions { get; init; }
+    public CollectionOptions? CollectionOptions { get; }
 
     /// <summary>
     ///
