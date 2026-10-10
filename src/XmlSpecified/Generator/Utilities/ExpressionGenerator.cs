@@ -11,7 +11,7 @@ internal static class ExpressionGenerator
     {
         var propertyType = propertyData.PropertyType;
         var attributeValues = propertyData.AttributeOptions;
-        var propertyName = propertyData.PropertyName;
+        var propertyName = SyntaxUtilities.EscapeIdentifier(propertyData.PropertyName);
 
         // Check for nullable value type first
         if (propertyType.IsNullable)
@@ -71,14 +71,9 @@ internal static class ExpressionGenerator
             );
         }
 
-        // Reference type default (should only reach here for non-collection reference types)
-        if (propertyType.IsReference)
-        {
-            return GetReferenceTypeDefaultCheckExpression(propertyName);
-        }
-
-        // Fallback (shouldn't reach here with proper validation)
-        return $"{propertyName} != null";
+        // Reference type default. Unsupported value types are rejected by the analyzer (XSG006),
+        // so every remaining type can be compared with null.
+        return GetReferenceTypeDefaultCheckExpression(propertyName);
     }
 
     /// <summary>
